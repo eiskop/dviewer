@@ -6,12 +6,19 @@ body {
 .wrap {
     min-height: 100%;
     height: auto;
+    width: 100%;
+    min-width: 100%;
     margin: 0 auto -60px;
     padding: 0 0 60px;
 }
 
 .wrap > .container {
     padding: 70px 15px 20px;
+}
+
+.container-full {
+  margin: 10px auto;
+  width: 100%;
 }
 
 .footer {

@@ -15,6 +15,12 @@ nbproject
 # windows thumbnail cache
 Thumbs.db
 
+#drawing data folders
+/common/data/txt
+/common/data/svg
+/common/data/pdf
+/common/data/xml
+
 # composer vendor dir
 /vendor
 
