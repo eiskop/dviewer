@@ -27,12 +27,20 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
 
     <p>
         <?= Html::a('Reset Filters', ['index'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('ImportPDM Data', ['/drawing/import-pdm'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
 <?php Pjax::begin(); ?>    <?= GridView::widget([
+
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'pager' => [
+            'firstPageLabel' => '<<<',
+            'lastPageLabel' => '>>>',
+        ],
+        'layout'=>"{pager} {summary} {items} {pager}",        
+        'showHeader' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'date',
@@ -40,7 +48,20 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
             //'vaultname',
             // 'doc_aliasset',
             // 'doc_pdmweid',
-            'drawing_number',
+            [
+                'attribute' => 'drawing_number',
+                'format' => 'html',
+                'value'=>function($data) {
+                    $path_pdf = '/dviewer/common/data/pdf';
+                    $fn_pdf = str_replace(' ', '_', $data->drawing_number).'-'.$data->revision.'.pdf';
+                    if (file_exists('../../common/data/pdf/'.$fn_pdf)) {
+                        return $data->drawing_number.'<span class="glyphicon glyphicon-file pull-right"></span>';
+                    }
+                    else {
+                        return $data->drawing_number;
+                    }
+                },
+            ],            
             // 'conf_name',
             // 'conf_quantity',
             'description1',
@@ -59,6 +80,67 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
             'approval_date',
             'approver',
             'created',
+            /*
+            [
+                'attribute' => 'SVG',
+                'format' => 'html',
+                'value'=>function($data) {
+                    $path_svg = '/dviewer/common/data/svg';
+                    $fn_svg = str_replace(' ', '_', $data->drawing_number).'-'.$data->revision.'.svg';
+                    if (file_exists('../../common/data/svg/'.$fn_svg)) {
+                        return '<span class="glyphicon glyphicon-file"></span>';
+                    }
+                    else {
+                        return '-';
+                    }
+                },
+                'contentOptions' => ['style' => 'text-align: center;'],
+            ],
+            [
+                'attribute' => 'pdf',
+                'format' => 'html',
+                'value'=>function($data) {
+                    $path_pdf = '/dviewer/common/data/pdf';
+                    $fn_pdf = str_replace(' ', '_', $data->drawing_number).'-'.$data->revision.'.pdf';
+                    if (file_exists('../../common/data/pdf/'.$fn_pdf)) {
+                        return '<span class="glyphicon glyphicon-file"></span>';
+                    }
+                    else {
+                        return '-';
+                    }
+                },
+                'contentOptions' => ['style' => 'text-align: center;'],
+            ],
+            [
+                'attribute' => 'txt',
+                'format' => 'html',
+                'value'=>function($data) {
+                    $path_txt = '/dviewer/common/data/txt';
+                    $fn_txt = str_replace(' ', '_', $data->drawing_number).'-'.$data->revision.'.txt';
+                    if (file_exists('../../common/data/txt/'.$fn_txt)) {
+                        return '<span class="glyphicon glyphicon-file"></span>';
+                    }
+                    else {
+                        return '-';
+                    }
+                },
+                'contentOptions' => ['style' => 'text-align: center;'],
+            ],
+            [
+                'attribute' => 'xml',
+                'format' => 'html',
+                'value'=>function($data) {
+                    $path_xml = '/dviewer/common/data/xml';
+                    $fn_xml = str_replace(' ', '_', $data->drawing_number).'-'.$data->revision.'.XML';
+                    if (file_exists('../../common/data/xml/'.$fn_xml)) {
+                        return '<span class="glyphicon glyphicon-file"></span>';
+                    }
+                    else {
+                        return '-';
+                    }
+                },
+                'contentOptions' => ['style' => 'text-align: center;'],
+            ],     */       
             //'changed',
             [  
                 'class' => 'yii\grid\ActionColumn',
@@ -85,7 +167,8 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
         ],
 
     ]); ?>
-<?php Pjax::end(); ?></div>
+<?php Pjax::end(); ?>
+</div>
 <?php
 $this->registerJs("
     $('td').dblclick(function (e) {
@@ -98,3 +181,4 @@ $this->registerJs("
     });
 
 ");
+

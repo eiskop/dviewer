@@ -6,9 +6,9 @@ use yii\widgets\DetailView;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Drawing */
+/* @var $model frontend\models\Drawing */
 
-$this->title = $model->id;
+$this->title = $model->drawing_number.'-'.$model->revision.', '.$model->description1;
 $this->params['breadcrumbs'][] = ['label' => 'Drawings', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -28,13 +28,25 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
 $pdf_file = $path_pdf.'/'.str_replace(' ', '_', $model->drawing_number.'-'.$model->revision).'.pdf';
 $svg_file = $path_svg.'/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
 
-$path_info = pathinfo($pdf_file);
-//$file_stats = stat($pdf_file);
-if (!file_exists($svg_file)) {
-//  echo $pdf_file;
-  //  $outp3 = shell_exec('inkscape -z -l '.$path_svg.'/'.$path_info['filename'].'.svg '.$path_pdf.'/'.$path_info['filename'].'.pdf');
-}
 
+//$file_stats = stat($pdf_file);
+$svg_file = '../../common/data/svg/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
+$pdf_file = '../../common/data/pdf/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.pdf';
+$txt_file = '../../common/data/txt/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.txt';
+$path_info = pathinfo($pdf_file);
+
+
+if (!file_exists($svg_file)) {
+    //echo $svg_file;
+    $outp1 = shell_exec('inkscape -z -l "'.$svg_file.'" "'.$pdf_file.'"');
+ //   echo '<p>inkscape -z -l "'.$svg_file.'" "'.$pdf_file.'"</p>';
+   // echo $outp1;
+}
+if (!file_exists($txt_file) AND file_exists($pdf_file)) {
+    $outp2 = shell_exec('pdftotext -raw "'.$pdf_file.'" "'.$txt_file.'"');
+    echo $outp2;
+    echo '<p>pdftotext -raw "'.$pdf_file.'" "'.$txt_file.'"</p>';
+}
 
 $fn_pdf = str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.pdf';
 $fn_svg = str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
