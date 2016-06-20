@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
+use frontend\models\Entity;
 
 
 /* @var $this yii\web\View */
@@ -14,25 +15,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
+$entity_data = Entity::findOne(['id' => $model->entity_id]);
+;
 
-
-$path_txt = '/dviewer/common/data/txt';
-$path_xml = '/dviewer/common/data/xml';
-$path_pdf = '/dviewer/common/data/pdf';
-$path_jpg = '/dviewer/common/data/jpg';
-$path_svg = '/dviewer/common/data/svg';
+$path_txt = '/dviewer/common/data/txt/'.$entity_data->folder_name.'';
+$path_xml = '/dviewer/common/data/xml/'.$entity_data->folder_name.'';
+$path_pdf = '/dviewer/common/data/pdf/'.$entity_data->folder_name.'';
+$path_jpg = '/dviewer/common/data/jpg/'.$entity_data->folder_name.'';
+$path_svg = '/dviewer/common/data/svg/'.$entity_data->folder_name.'';
 
 
 $list = array('drawing_number', 'item_name', 'description', 'all_fields');
+function str2_replace($search, $replace, $subject) {
+    return str_replace('', '', $subject);
+}
 
-$pdf_file = $path_pdf.'/'.str_replace(' ', '_', $model->drawing_number.'-'.$model->revision).'.pdf';
-$svg_file = $path_svg.'/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
+$pdf_file = $path_pdf.'/'.str2_replace(' ', '_', $model->drawing_number.'-'.$model->revision).'.pdf';
+$svg_file = $path_svg.'/'.str2_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
 
 
 //$file_stats = stat($pdf_file);
-$svg_file = '../../common/data/svg/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
-$pdf_file = '../../common/data/pdf/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.pdf';
-$txt_file = '../../common/data/txt/'.str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.txt';
+$svg_file = '../../common/data/svg/'.$entity_data->folder_name.'/'.str2_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
+$pdf_file = '../../common/data/pdf/'.$entity_data->folder_name.'/'.str2_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.pdf';
+$txt_file = '../../common/data/txt/'.$entity_data->folder_name.'/'.str2_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.txt';
 $path_info = pathinfo($pdf_file);
 
 
@@ -48,8 +53,8 @@ if (!file_exists($txt_file) AND file_exists($pdf_file)) {
     echo '<p>pdftotext -raw "'.$pdf_file.'" "'.$txt_file.'"</p>';
 }
 
-$fn_pdf = str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.pdf';
-$fn_svg = str_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
+$fn_pdf = str2_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.pdf';
+$fn_svg = str2_replace(' ', '_', $model->drawing_number).'-'.$model->revision.'.svg';
     //if (!file_exists($path_pdf.'/'.$fn_pdf) AND !file_exists($path_svg.'/'.$fn_svg)) {
     //  echo $pdf_file;
   //      $outp3 = shell_exec('inkscape -z -l '.$path_pdf.'/'.$fn_pdf.' '.$path_svg.'/'.$fn_svg);
@@ -167,17 +172,18 @@ exit;
             'drawing_number',
             'conf_name',
             'conf_quantity',
-            'description1',
-            'description2',
-            'description3',
+            'description1:html',
+            'description2:html',
+            'description3:html',
+            'noa:html',
             'revision',
-            'item_name',
+            'item_name:html',
             'creator',
             'approver',
-            'product_responsible',
+            'product_responsible:html',
             'state',
             'xml_file_name',
-            'pdf_contents',
+            'pdf_contents:html',
             'xml_file_created',
             'creation_date',
             'approval_date',

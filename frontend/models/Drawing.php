@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+
 use Yii;
 
 /**
@@ -20,6 +21,7 @@ use Yii;
  * @property string $description1
  * @property string $description2
  * @property string $description3
+ * @property string $noa 
  * @property string $revision
  * @property string $item_name
  * @property string $creator
@@ -27,10 +29,14 @@ use Yii;
  * @property string $product_responsible
  * @property string $state
  * @property string $xml_file_name
+ * @property string $pdf_path  
  * @property string $pdf_contents
+ * @property string $pdf_contents_lc 
+ * @property string $pdf_contents_uc  
  * @property string $xml_file_created
  * @property string $creation_date
  * @property string $approval_date
+ * @property integer $active  
  * @property string $created
  * @property string $changed
  *
@@ -54,8 +60,8 @@ class Drawing extends \yii\db\ActiveRecord
         return [
             [['entity_id', 'date', 'type', 'vaultname', 'doc_aliasset', 'doc_pdmweid', 'drawing_number', 'conf_name', 'conf_quantity', 'description1', 'description2', 'description3', 'revision', 'item_name', 'creator', 'approver', 'product_responsible', 'state', 'xml_file_name', 'pdf_contents', 'xml_file_created', 'creation_date', 'approval_date', 'created'], 'required'],
             [['entity_id', 'date', 'doc_pdmweid', 'conf_name', 'conf_quantity'], 'integer'],
-            [['xml_file_created', 'creation_date', 'approval_date', 'created', 'changed'], 'safe'],
-            [['type', 'description1', 'description2', 'description3', 'item_name', 'creator', 'approver', 'product_responsible'], 'string', 'max' => 255],
+            [['xml_file_created', 'creation_date', 'approval_date', 'created', 'changed', 'noa', 'pdf_path', 'pdf_contents_uc', 'pdf_contents_lc', 'active'], 'safe'],
+            [['type', 'description1', 'description2', 'description3', 'item_name', 'creator', 'approver', 'product_responsible', 'pdf_path'], 'string', 'max' => 255],
             [['vaultname', 'doc_aliasset', 'xml_file_name'], 'string', 'max' => 100],
             [['drawing_number'], 'string', 'max' => 20],
             [['revision', 'state'], 'string', 'max' => 10],
@@ -83,6 +89,7 @@ class Drawing extends \yii\db\ActiveRecord
             'description1' => 'Description1',
             'description2' => 'Description2',
             'description3' => 'Description3',
+            'noa' => 'Noa',             
             'revision' => 'Revision',
             'item_name' => 'Item Name',
             'creator' => 'Creator',
@@ -90,11 +97,15 @@ class Drawing extends \yii\db\ActiveRecord
             'product_responsible' => 'Product Responsible',
             'state' => 'State',
             'xml_file_name' => 'Xml File Name',
+            'pdf_path' => 'Pdf Path', 
             'pdf_contents' => 'Pdf Contents',
+            'pdf_contents_lc' => 'Pdf Contents LC', 
+            'pdf_contents_uc' => 'Pdf Contents UC',             
             'xml_file_created' => 'Xml File Created',
             'creation_date' => 'Creation Date',
             'approval_date' => 'Approval Date',
-            'created' => 'Created',
+            'active' => 'Active',
+            'created' => 'Imported',
             'changed' => 'Changed',
         ];
     }

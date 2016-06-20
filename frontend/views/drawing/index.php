@@ -31,7 +31,9 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
     </p>
 
 
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php Pjax::begin(); ?>    
+
+<?= GridView::widget([
 
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -64,9 +66,9 @@ $list = array('drawing_number', 'item_name', 'description', 'all_fields');
             ],            
             // 'conf_name',
             // 'conf_quantity',
-            'description1',
+            'description1:html',
             'revision',
-            'item_name',
+            'item_name:html',
             
             // 'product_responsible',
             // 'state',
